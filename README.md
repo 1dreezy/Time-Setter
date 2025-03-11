@@ -18,12 +18,9 @@ Time Setter is a mod for GTA: San Andreas that enables a smooth transition throu
 2. 📂 Copy the `TimeSetter.lua` file into the `moonloader` folder inside your game directory.
 3. 🎮 Launch the game and enjoy the smooth time transitions!
 
-## 🎥 Mod Showcase
-Below is a visual demonstration of the mod in action:
-
-![🕒 Time Setter Mod in Action](https://github.com/USERNAME/REPO_NAME/raw/main/demo.gif)
-
 📹 **Video Showcase:**
+
+Below is a visual demonstration of the mod in action:
 
 👉  [WATCH HERE!](https://streamable.com/6xi88s)
 

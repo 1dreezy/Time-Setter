@@ -25,7 +25,8 @@ Below is a visual demonstration of the mod in action:
 
 📹 **Video Showcase:**
 
-👉 [**CLICK HERE TO WATCH!**](https://streamable.com/6xi88s) 🎬
+👉  [WATCH HERE!](https://streamable.com/6xi88s)
+
 
 ## 🤝 Contributions
 If you’d like to enhance this mod, feel free to submit a **pull request** or open an **issue**.

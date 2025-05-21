@@ -25,9 +25,6 @@ Below is a visual demonstration of the mod in action:
 👉  [WATCH HERE!](https://streamable.com/6xi88s)
 
 
-## 🤝 Contributions
-If you’d like to enhance this mod, feel free to submit a **pull request** or open an **issue**.
-
 ## 📜 License
 This project is licensed under the **MIT License** – feel free to use and modify it as you wish.
 

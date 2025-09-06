@@ -7,7 +7,7 @@ script_name("TimeSetter with Transition")
 script_description("/sw - change weather, /st - change time")
 script_version_number(2)
 script_version("v2.0")
-script_author("ANDRE")
+script_author("dreezy")
 script_dependencies('SAMP v0.3.7')
 
 -- general var
@@ -161,3 +161,4 @@ function startTimeTransition()
     end)
 
 end
+

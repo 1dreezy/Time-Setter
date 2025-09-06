@@ -7,16 +7,15 @@ script_name("TimeSetter with Transition")
 script_description("/sw - change weather, /st - change time")
 script_version_number(2)
 script_version("v2.0")
-script_author("WADE")
+script_author("ANDRE")
 script_dependencies('SAMP v0.3.7')
 
--- Global variables
+-- general var
 local time = {hour = nil, minute = nil}
 local transition_active = false
 local target_time = {hour = nil, minute = 0}
-local Minutes = ffi.cast("uint8_t*", 0xB70152)  -- Memory address for minutes
+local Minutes = ffi.cast("uint8_t*", 0xB70152) 
 
---- Main
 function main()
     if not isSampLoaded() or not isSampfuncsLoaded() then return end
     while not isSampAvailable() do wait(100) end
@@ -31,7 +30,6 @@ function main()
     end
 end
 
---- Callbacks
 function cmdSetTime(param)
     local hour = tonumber(param)
 
@@ -60,21 +58,21 @@ function cmdSetTime(param)
 
     if time.hour ~= nil then
         target_time.hour = hour
-        target_time.minute = math.random(0, 59)  -- Minute aleatorii între 0 și 59
+        target_time.minute = math.random(0, 59)
         startTimeTransition()
     else
         time.hour = hour
-        time.minute = math.random(0, 59)  -- Minute aleatorii între 0 și 59
+        time.minute = math.random(0, 59) 
         patch_samp_time_set(true)
     end
 
 local am_pm = (hour >= 12) and "PM" or "AM"
 local display_hour = (hour % 12 == 0) and 12 or (hour % 12)
-local minutes = string.format("%02d", target_time.minute)  -- Folosește target_time.minute, nu time.minute
+local minutes = string.format("%02d", target_time.minute) 
 local formatted_time = string.format("%d:%s %s", display_hour, minutes, am_pm)
 
 
-    -- Mesaje personalizate în funcție de ora setată
+   
     local message = ""
     if hour >= 6 and hour < 12 then
         message = "{FFD700}Morning-Time{FFFFFF} has been set. The time is now " .. formatted_time .. "."
@@ -89,7 +87,6 @@ local formatted_time = string.format("%d:%s %s", display_hour, minutes, am_pm)
     sampAddChatMessage("{a25ed6}[V+]:{FFFFFF} " .. message, -1)
 end
 
---- Functions
 function patch_samp_time_set(enable)
     if enable and default == nil then
         default = readMemory(sampGetBase() + 0x9C0A0, 4, true)
@@ -104,19 +101,19 @@ function startTimeTransition()
 
     local hour_diff = math.abs(target_time.hour - time.hour)
     local step
-    local base_delay = 2  -- Base delay in milliseconds
+    local base_delay = 2  
     local delay
 
-    -- Determine the delay based on the hour difference
+   
     if hour_diff > 12 then
-        delay = base_delay * 0.5  -- Faster if the difference is greater than 12
+        delay = base_delay * 0.5 
     elseif hour_diff > 8 then
-        delay = base_delay * 0.75  -- Faster if the difference is greater than 8
+        delay = base_delay * 0.75
     else
-        delay = base_delay  -- Normal delay for smaller differences
+        delay = base_delay 
     end
 
-    -- Determine the most efficient transition direction
+   
     if hour_diff > 12 then
         step = (target_time.hour > time.hour) and -1 or 1
     else
@@ -124,37 +121,33 @@ function startTimeTransition()
     end
 
     lua_thread.create(function()
-        -- Handle the specific case of transitioning from 23 to 0 or vice versa
+        
         if (time.hour == 23 and target_time.hour == 0) or (time.hour == 0 and target_time.hour == 23) then
-            setTimeOfDay(23, 59) -- Set to the end of the day
+            setTimeOfDay(23, 59)
             wait(0)
-            setTimeOfDay(0, 0) -- Directly set to the start of the new day
+            setTimeOfDay(0, 0) 
             transition_active = false
             return
         end
 
         while time.hour ~= target_time.hour do
-            -- Forward transition: minutes from 0 to 59
             if step == 1 then
                 while tonumber(Minutes[0]) < 59 do
                     Minutes[0] = Minutes[0] + 1
                     setTimeOfDay(time.hour, tonumber(Minutes[0]))
-                    wait(delay) -- Adjusted delay for faster transition
+                    wait(delay) 
                 end
-            -- Reverse transition: minutes from 59 to 0
             elseif step == -1 then
                 while tonumber(Minutes[0]) > 0 do
                     Minutes[0] = Minutes[0] - 1
                     setTimeOfDay(time.hour, tonumber(Minutes[0]))
-                    wait(delay) -- Adjusted delay for faster transition
+                    wait(delay) 
                 end
             end
-
-            -- Reset or set minutes depending on transition direction
+                
             Minutes[0] = (step == 1) and 0 or 59
             time.hour = time.hour + step
 
-            -- Handle hour overflow
             if time.hour > 23 then 
                 time.hour = 0 
             elseif time.hour < 0 then
@@ -166,4 +159,5 @@ function startTimeTransition()
 
         transition_active = false
     end)
+
 end
